@@ -3,6 +3,17 @@ Tracks how much of a particular project is owned by mice (genesis, staked, and b
 
 This started out as a joke for people to counter-trade mice, but it is useful for tracking and examples in general. 
 
+## Requirements
+
+* Requires Python3+
+* Everything in requirements.txt
+
+## Installation
+
+After installing Python 3, just run:
+
+`pip install -r requirements.txt`
+
 ## Usage
 
 1. Set your .env variables for ETHERSCAN_API_KEY and WEB3_URL
