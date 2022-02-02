@@ -1,5 +1,6 @@
 from concurrent.futures.thread import ThreadPoolExecutor
 from dotenv import load_dotenv
+import os
 import requests
 import json
 import sys
