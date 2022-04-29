@@ -25,6 +25,10 @@ session.headers.update(headers)
 # Setting up web3 stuff
 web3 = Web3(Web3.HTTPProvider(WEB3_URL))
 
+
+# These are some constants for the examples below,
+# hopefully it demonstrates checking staking/non-staking contracts.
+
 # Anonymice Contract - https://etherscan.io/address/0xbad6186e92002e312078b5a1dafd5ddf63d3f731#code
 MOUSE_ADDRESS = '0xbad6186e92002e312078b5a1dafd5ddf63d3f731'
 # Cheeth Contract - https://etherscan.io/address/0x5f7ba84c7984aa5ef329b66e313498f0aed6d23a#code
@@ -34,14 +38,23 @@ BABY_ADDRESS = '0x15cc16bfe6fac624247490aa29b6d632be549f00'
 
 # FOMO Contract - https://etherscan.io/address/0x818a19a6d3f0859b68e8490a6e945a51060caad1#code
 FOMO_ADDRESS = '0x818a19a6d3f0859b68e8490a6e945a51060caad1'
+
 # Habibz Contract - https://etherscan.io/address/0x98a0227e99e7af0f1f0d51746211a245c3b859c2#code
 HABIBZ_ADDRESS = '0x98a0227e99e7af0f1f0d51746211a245c3b859c2'
 
-# Set the target project information here
-TARGET_CONTRACT = FOMO_ADDRESS
-TARGET_NAME = "FOMO MOFOs"
-MAX_SUPPLY = 8008.0
+# WarKittens Contract - https://etherscan.io/address/0xC4771c27FB631FF6046845d06561bF20eF753DaB#code
+WK_ADDRESS = '0xc4771c27fb631ff6046845d06561bf20ef753dab'
 
+# Set the target project information here
+TARGET_CONTRACT = WK_ADDRESS
+TARGET_NAME = "War Kittens"
+
+# In theory this should be obtained from the totalSupply()
+MAX_SUPPLY = 9500.0
+
+# These sections are if you want to include staking logic.
+# If not, you only need one of these methods
+#######################################################################################################
 abi_mice_contract = requests.get('%s%s'%(ABI_ENDPOINT, MOUSE_ADDRESS)).json()['result']
 address_mice = Web3.toChecksumAddress(MOUSE_ADDRESS)
 mice_contract = web3.eth.contract(address=address_mice, abi=abi_mice_contract)
@@ -53,6 +66,12 @@ cheeth_contract = web3.eth.contract(address=address_cheeth, abi=abi_cheeth_contr
 abi_baby_contract = requests.get('%s%s'%(ABI_ENDPOINT, BABY_ADDRESS)).json()['result']
 address_baby = Web3.toChecksumAddress(BABY_ADDRESS)
 baby_contract = web3.eth.contract(address=address_baby, abi=abi_baby_contract)
+#######################################################################################################
+
+# Here is the example if you only want to check FROM one contract.
+#abi_source_contract = requests.get('%s%s'%(ABI_ENDPOINT, HABIBZ_ADDRESS)).json()['result']
+#address_source = Web3.toChecksumAddress(HABIBZ_ADDRESS)
+#source_contract = web3.eth.contract(address=address_source, abi=abi_source_contract)
 
 abi_tgt_contract = requests.get('%s%s'%(ABI_ENDPOINT, TARGET_CONTRACT)).json()['result']
 address_tgt = Web3.toChecksumAddress(TARGET_CONTRACT)
@@ -63,22 +82,31 @@ doyler_address = '0xeD19c8970c7BE64f5AC3f4beBFDDFd571861c3b7'
 
 all_owners = set()
 
+# Again, these variables are only needed if you want to check holders of
+# "multiple" different collections/wallets
+#######################################################################################################
 mouse_owners = []
 staked_mice = []
 staked_mice_owners = []
 burned_mice_owners = []
 baby_mice_owners = []
+#######################################################################################################
+
+# Example variable for 1:1 checking
+# source_owners = []
 
 tgt_counts = {}
 
-# 0x000000000000000000000000000000000000dEaD  -  burned
-# 0x5f7BA84c7984Aa5ef329B66E313498F0aEd6d23A  -  staked
-
+# More mouse specific examples
+# "multiple" different collections/wallets
+#######################################################################################################
 def getMiceOwners(tokenID):
     owner = mice_contract.functions.ownerOf(tokenID).call()
     #owner = owner.lower()
     
     # Technically ETH addresses are case-insensitive, but saw a few weird cases with dEaD in particular
+    # 0x000000000000000000000000000000000000dEaD  -  Anonymice burned
+    # 0x5f7BA84c7984Aa5ef329B66E313498F0aEd6d23A  -  Cheeth v1 staked
     if owner.lower() == "0x000000000000000000000000000000000000dead".lower():
         burned_mice_owners.append(owner)
     elif owner.lower() == "0x5f7BA84c7984Aa5ef329B66E313498F0aEd6d23A".lower():
@@ -95,6 +123,13 @@ def getStakedOwner(tokenID):
     owner = cheeth_contract.functions.getStaker(tokenID).call()
     
     staked_mice_owners.append(owner)
+#######################################################################################################    
+
+# Here is the example if you only want to check FROM one contract.
+#def getSourceOwner(tokenID):
+#    owner = source_contract.functions.ownerOf(tokenID).call()
+#    
+#    source_owners.append(owner)
     
 def addTgtCount(address):
     count = tgt_contract.functions.balanceOf(address).call()
@@ -104,6 +139,8 @@ def addTgtCount(address):
 # Parallelize for speed
 processes = []
 
+# More mouse specific examples
+#######################################################################################################
 with ThreadPoolExecutor(max_workers=20) as executor:
     # 10k Genesis mice
     for i in range(0, 10001):
@@ -126,11 +163,22 @@ for owner in staked_mice_owners:
     
 for owner in baby_mice_owners:
     all_owners.add(owner)
+#######################################################################################################
+
+# Here is the example if you only want to check FROM one contract.
+#with ThreadPoolExecutor(max_workers=20) as executor:
+#    for i in range(0, 10001):
+#        processes.append(executor.submit(getSourceOwner, i))
+        
+#for owner in source_owners:
+#    all_owners.add(owner)
 
 with ThreadPoolExecutor(max_workers=20) as executor:
     for owner in all_owners:
         processes.append(executor.submit(addTgtCount, owner))
 
+# More mouse specific examples
+#######################################################################################################
 mouse_count = 0
 staked_count = 0
 baby_count = 0
@@ -147,6 +195,7 @@ for owner in staked_mice_owners:
 for owner in baby_mice_owners:
     if owner in tgt_counts:
         baby_count += tgt_counts[owner]
+#######################################################################################################        
     
 for owner in all_owners:
     if owner in tgt_counts:
@@ -169,8 +218,8 @@ print()
 print("IN TOTAL")
 print("=======================================")
 print("ALL Unique Anonymice + baby holders have: " + str(total_count) + " " + str(TARGET_NAME))
-print("This represents a " + str(percentage_owned) + " mouse share in the" + str(TARGET_NAME) + " project!!!")
+print("This represents a " + str("{:.0%}".format(percentage_owned)) + " mouse share in the" + str(TARGET_NAME) + " project!!!")
 print()
 
-print("Doyler, the broke dev who wrote this, accepts donations here: " + str(doyler_address))
+print("Doyler, the dev who wrote this, accepts donations here: " + str(doyler_address))
 print()

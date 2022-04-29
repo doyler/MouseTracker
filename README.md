@@ -23,16 +23,17 @@ After installing Python 3, just run:
 ## TODO
 
 * Add support for a Discord bot (or just turn it into one)
-* Clean up percentage tracking
 * Allow for user input for the target project/contract
 * Parse OS URL for the target?
 * Better commenting and documentation
 * Front-end support and tracking
-* See if there is a default MAX_SUPPLY or a way to obtain it from a contract
+* Get MAX_SUPPLY from the contract(s)
 * Anything else?
 
 # Donations
 
-Doyler is definitely broke and bad at JPEGs, so drop donos here:
+Doyler is definitely bad at JPEGs, so drop donos here:
 
 `0xeD19c8970c7BE64f5AC3f4beBFDDFd571861c3b7`
+
+Or, hire him - [@NftDoyler](https://twitter.com/NftDoyler)
