@@ -22,7 +22,7 @@ After installing Python 3, just run:
 
 ## Example Output
 
-Here is an example run of (Anonymice)[https://opensea.io/collection/anonymice] (using only $CHEETH v1) holdings in (WarKittens)[https://opensea.io/collection/warkittens].
+Here is an example run of [Anonymice](https://opensea.io/collection/anonymice) (using only $CHEETH v1) holdings in [WarKittens](https://opensea.io/collection/warkittens).
 
 ```
 Anonymice holders (non-staked) currently hold: 254 War Kittens (non-unique counting)
