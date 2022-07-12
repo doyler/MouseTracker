@@ -227,7 +227,7 @@ print()
 print("IN TOTAL")
 print("=======================================")
 print("ALL Unique Anonymice + baby holders have: " + str(total_count) + " " + str(TARGET_NAME))
-print("This represents a " + str("{:.0%}".format(percentage_owned)) + " mouse share in the" + str(TARGET_NAME) + " project!!!")
+print("This represents a " + str("{:.2%}".format(percentage_owned)) + " mouse share in the " + str(TARGET_NAME) + " project!!!")
 print()
 
 print("Doyler, the dev who wrote this, accepts donations here: " + str(doyler_address))
