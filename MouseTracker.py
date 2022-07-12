@@ -33,6 +33,8 @@ web3 = Web3(Web3.HTTPProvider(WEB3_URL))
 MOUSE_ADDRESS = '0xbad6186e92002e312078b5a1dafd5ddf63d3f731'
 # Cheeth Contract - https://etherscan.io/address/0x5f7ba84c7984aa5ef329b66e313498f0aed6d23a#code
 CHEETH_ADDRESS = '0x5f7ba84c7984aa5ef329b66e313498f0aed6d23a'
+# Cheeth v2 Contract - https://etherscan.io/address/0x54C4419b7be48889097a70Ef6Bdc47feAC54AEF5#code
+CHEETH2_ADDRESS = '0x54C4419b7be48889097a70Ef6Bdc47feAC54AEF5'
 # Baby Contract - https://etherscan.io/address/0x15cc16bfe6fac624247490aa29b6d632be549f00#code
 BABY_ADDRESS = '0x15cc16bfe6fac624247490aa29b6d632be549f00'
 
@@ -45,9 +47,12 @@ HABIBZ_ADDRESS = '0x98a0227e99e7af0f1f0d51746211a245c3b859c2'
 # WarKittens Contract - https://etherscan.io/address/0xC4771c27FB631FF6046845d06561bF20eF753DaB#code
 WK_ADDRESS = '0xc4771c27fb631ff6046845d06561bf20ef753dab'
 
+# SigOthers
+SIGOTHER_ADDRESS = '0x6659F3B08403C11a2d98B4beC0027c1E41844283'
+
 # Set the target project information here
-TARGET_CONTRACT = WK_ADDRESS
-TARGET_NAME = "War Kittens"
+TARGET_CONTRACT = SIGOTHER_ADDRESS
+TARGET_NAME = "SigOthers"
 
 # In theory this should be obtained from the totalSupply()
 MAX_SUPPLY = 9500.0
@@ -62,6 +67,10 @@ mice_contract = web3.eth.contract(address=address_mice, abi=abi_mice_contract)
 abi_cheeth_contract = requests.get('%s%s'%(ABI_ENDPOINT, CHEETH_ADDRESS)).json()['result']
 address_cheeth = Web3.toChecksumAddress(CHEETH_ADDRESS)
 cheeth_contract = web3.eth.contract(address=address_cheeth, abi=abi_cheeth_contract)
+
+abi_cheeth2_contract = requests.get('%s%s'%(ABI_ENDPOINT, CHEETH2_ADDRESS)).json()['result']
+address_cheeth2 = Web3.toChecksumAddress(CHEETH2_ADDRESS)
+cheeth2_contract = web3.eth.contract(address=address_cheeth2, abi=abi_cheeth2_contract)
 
 abi_baby_contract = requests.get('%s%s'%(ABI_ENDPOINT, BABY_ADDRESS)).json()['result']
 address_baby = Web3.toChecksumAddress(BABY_ADDRESS)
